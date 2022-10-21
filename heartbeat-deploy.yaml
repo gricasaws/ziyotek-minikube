@@ -1,0 +1,30 @@
+ apiVersion: extensions/v1beta1
+ kind: Deployment
+ metadata:
+   labels:
+     app: heartbeat
+   name: heartbeat
+ spec:
+   replicas: 2
+   selector:
+     matchLabels:
+       app: heartbeat
+   template:
+     metadata:
+       labels:
+         app: heartbeat
+     spec:
+       containers:
+       - image: heartbeat:v2
+         env:
+         - name: VOLUME
+           value: "/var/log/heartbeat"
+         name: heartbeat
+         volumeMounts:
+         - mountPath: "/var/log/heartbeat"
+           name: heartbeat-vol
+       volumes:
+       - name: heartbeat-vol
+         persistentVolumeClaim: 
+           claimName: heartbeat-pvc
+       restartPolicy: Always
